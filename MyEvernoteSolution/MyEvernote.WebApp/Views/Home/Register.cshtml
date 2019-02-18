@@ -1,0 +1,49 @@
+﻿@using MyEvernote.Entities.ValueObject
+@model RegisterViewModel
+
+
+@{
+    ViewBag.Title = "Kayıt Sayfası";
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="~/Content/login-register.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    <div class="container">
+
+        <div class="wrapper">
+
+
+            <section class="form-signin">
+
+                <h3 class="form-signin-heading">Hoş Geldin! Lütfen Kaydol Yap.</h3>
+                <hr class="colorgraph"><br>
+
+                @Html.ValidationSummary(false)
+
+                @Html.TextBoxFor(model => model.Username, new { @class = "form-control", placeholder = "Kullanıcı Adınız" })
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Mail Adresiniz" })
+
+
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder = "Şifreniz", type = "password" })
+
+                @Html.TextBoxFor(model => model.RePassword, new { @class = "form-control", placeholder = "Şifreniz Tekrar", type = "password" })
+
+
+
+                <button class="btn btn-lg btn-primary btn-block" value="Login" type="submit">Kaydol</button>
+            </section>
+        </div>
+
+
+
+    </div>};
+
+<script>
+    $(function () {
+        $("footer").hide();
+
+    });</script>

@@ -1,0 +1,43 @@
+﻿@using MyEvernote.Entities.Messages
+@model List<ErrorMessageObj>
+@{
+    ViewBag.Title = "Hesap Geçersiz";
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="~/Content/login-register.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div class="wrapper">
+
+
+        <section class="form-signin">
+
+            <h3 class="form-signin-heading">SEN NAPIYOSUN SEN ! .</h3>
+
+            @foreach (ErrorMessageObj error in Model)
+            {
+                @error.Message
+
+            }
+            <hr class="colorgraph"><br>
+
+
+
+        </section>
+    </div>
+
+
+
+</div>
+
+<script>
+    $(function () {
+        $("footer").hide();
+        setTimeout(function () {
+            window.location = "/Home/Index";
+        }, 2000);
+
+    });</script>

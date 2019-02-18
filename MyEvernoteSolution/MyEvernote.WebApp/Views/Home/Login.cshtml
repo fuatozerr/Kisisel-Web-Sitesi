@@ -1,0 +1,44 @@
+﻿@using MyEvernote.Entities.ValueObject
+@model LoginViewModel
+
+
+@{
+    ViewBag.Title = "Giriş Sayfası";
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="~/Content/login-register.css" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+    <div class="container">
+
+        <div class="wrapper">
+
+          
+            <section class="form-signin">
+                @Html.ValidationSummary(false)
+
+                @if(ViewBag.SetLink !=null)
+                {
+                <a href="@ViewBag.SetLink" class="btn btn-primary">Activate</a>
+                }
+                <h3 class="form-signin-heading">Hoş Geldin! Lütfen Giriş Yap.</h3>
+                <hr class="colorgraph"><br>
+
+                @Html.TextBoxFor(model => model.Username, new { @class = "form-control", placeholder = "Kullanıcı Adınız" })
+
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder = "Şifreniz", type = "password" })
+
+                <button class="btn btn-lg btn-primary btn-block" value="Login" type="submit">Giriş Yap</button>
+            </section>
+        </div>
+
+
+
+    </div>};
+
+<script>
+    $(function () {
+        $("footer").hide();
+
+    });</script>
