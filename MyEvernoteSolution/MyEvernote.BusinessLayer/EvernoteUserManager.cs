@@ -119,5 +119,19 @@ namespace MyEvernote.BusinessLayer
         } //dogrulama kodu gönderme işlemi
 
 
+        public BusinessLayerResult<EverNoteUser> GetUserById(int id)
+        {
+            BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
+            res.Result = repo_user.Find(x => x.Id == id);
+            if(res.Result==null)
+            {
+                res.AddError(ErrorMessageCode.UserNotFound, "Kullanıcı Bulunamadı");
+
+            }
+            return res;
+
+        }
+
+
     }
 }
