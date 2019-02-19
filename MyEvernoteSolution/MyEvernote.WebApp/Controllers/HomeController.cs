@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MyEvernote.WebApp.ViewModels;
 
 namespace MyEvernote.WebApp.Controllers
 {
@@ -69,7 +70,11 @@ namespace MyEvernote.WebApp.Controllers
             BusinessLayerResult<EverNoteUser> res= eum.GetUserById(currentUser.Id);
             if(res.Errors.Count>0)
             {
-                //hata ekranına yolla
+                ErrorViewModel errorNotifObj = new ErrorViewModel()
+                {
+                    Title="Hata Oluştu",
+                    Items=res.Errors
+                };
             }
             return View(res.Result);
         }
@@ -199,18 +204,22 @@ namespace MyEvernote.WebApp.Controllers
 
                 }*/
 
-                
+                OkViewModel notifyObj = new OkViewModel()
+                {
+                    Title = "Kayıt Başarılı",
+                    RedirectingUrl = "/Home/Login",
 
-                return RedirectToAction("RegisterOk");
+                };
+
+                notifyObj.Items.Add("Epostaya gelen linki tıklayın. ");
+
+                return View("Ok",notifyObj);
             }
             return View(model);
 
         }
 
-        public ActionResult RegisterOk()
-        {
-            return View();
-        }
+        
 
         public ActionResult UserActivate(Guid id)
         {
@@ -220,27 +229,27 @@ namespace MyEvernote.WebApp.Controllers
 
             if(res.Errors.Count>0)
             {
-                TempData["errors"] = res.Errors;
+                ErrorViewModel notifyObj = new ErrorViewModel()
+                {
+                    Title = "Geçersiz işlem",
+                    Items = res.Errors
+                };
 
-                return RedirectToAction("UserActivateCancel");
+                return View("Error", notifyObj);
             }
-            return RedirectToAction("UserActivateOk");
-        }
 
-        public ActionResult UserActivateOk()
-        {
-            return View();
-        }
-
-        public ActionResult UserActivateCancel()
-        {
-            List<ErrorMessageObj> errors = null;
-            if(TempData["errors"]!=null)
+            OkViewModel okNotifyObj = new OkViewModel()
             {
-                errors = TempData["errors"] as List<ErrorMessageObj>;
-            }
+                Title="Hesap Aktifleştirildi",
+                RedirectingUrl="/Home/Login",
+                
+                
+            };
 
-            return View(errors);
+            okNotifyObj.Items.Add("Hesabınız aktifleştirildi");
+
+            return View("ok",okNotifyObj);
         }
+         
     }
 }

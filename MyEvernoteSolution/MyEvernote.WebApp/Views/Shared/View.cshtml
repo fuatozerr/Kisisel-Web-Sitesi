@@ -1,0 +1,53 @@
+﻿@using MyEvernote.WebApp.ViewModels
+@model WarningViewModel
+@{
+    ViewBag.Title = Model.Title;
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="~/Content/login-register.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div class="wrapper">
+
+
+        <section class="form-signin">
+
+            <h3 class="form-signin-heading">@Model.Header .</h3>
+
+            @foreach (string msg in Model.Items)
+            {
+                @msg<br />
+
+            }
+            <hr class="colorgraph"><br>
+
+
+
+        </section>
+    </div>
+
+
+
+</div>
+
+@{
+    string js = string.Empty;
+    if (Model.IsRedirecting)
+    {
+        js = " setTimeout(function () {window.location = '" + Model.RedirectingUrl + "';}, " + Model.RedirectingTimeout + "); ";
+
+    }
+
+
+}
+
+<script>
+    $(function () {
+        $("footer").hide();
+
+        @Html.Raw(js);
+
+    });</script>
