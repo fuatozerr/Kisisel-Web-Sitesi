@@ -70,24 +70,21 @@ namespace MyEvernote.BusinessLayer
         {
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
 
-            EverNoteUser user = repo_user.Find(x => x.Id==id);
-
+            EverNoteUser user = repo_user.Find(x => x.Id == id);
             if(user!=null)
             {
                 if(repo_user.Delete(user)==0)
                 {
                     res.AddError(ErrorMessageCode.UserCouldNotRemove, "Kullanıcı Silinemedi");
                 }
-
                 else
                 {
-                    res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı Silinemedi");
-
+                    res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı Bulunamadı");
                 }
-                return res;
             }
 
 
+            return res;
         }
 
         public BusinessLayerResult<EverNoteUser> LoginUser(LoginViewModel data)

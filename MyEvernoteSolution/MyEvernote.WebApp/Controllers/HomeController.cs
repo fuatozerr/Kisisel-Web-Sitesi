@@ -83,7 +83,7 @@ namespace MyEvernote.WebApp.Controllers
         {
             EverNoteUser currentUser = Session["login"] as EverNoteUser;
             EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EverNoteUser> res = eum.RemoveUserById(currentUser);
+            BusinessLayerResult<EverNoteUser> res = eum.RemoveUserById(currentUser.Id);
 
             if(res.Errors.Count>0)
             {
