@@ -60,6 +60,10 @@
       <Project>{3e756534-9ef8-4b38-9316-7086dfa8e29f}</Project>
       <Name>MyEvernote.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MyEvernote.core\MyEvernote.core.csproj">
+      <Project>{21fce863-1734-4549-88dd-f9dfff460fac}</Project>
+      <Name>MyEvernote.core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyEvernote.DataAccessLayer\MyEvernote.DataAccessLayer.csproj">
       <Project>{c5f6f9e0-d318-4cef-9cc6-e2f02be44251}</Project>
       <Name>MyEvernote.DataAccessLayer</Name>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.BusinessLayer
 {
-   public class CategoryManager
+   public class CategoryManager : Repository<Category>
     {
         private Repository<Category> repo_category = new Repository<Category>();
 
