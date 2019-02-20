@@ -81,13 +81,51 @@ namespace MyEvernote.WebApp.Controllers
 
         public ActionResult EditProfile()
         {
-            return View();
+            EverNoteUser currentUser = Session["login"] as EverNoteUser;
+            EvernoteUserManager eum = new EvernoteUserManager();
+            BusinessLayerResult<EverNoteUser> res = eum.GetUserById(currentUser.Id);
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifObj = new ErrorViewModel()
+                {
+                    Title = "Hata Oluştu",
+                    Items = res.Errors
+                };
+            }
+            return View(res.Result);
         }
 
         [HttpPost]
-        public ActionResult EditProfile(EverNoteUser user)
+        public ActionResult EditProfile(EverNoteUser model,HttpPostedFileBase ProfileImage)
         {
-            return View();
+            if(ProfileImage !=null &&
+                ProfileImage.ContentType=="image/jpeg" ||
+                 ProfileImage.ContentType == "image/jpg" ||
+                 ProfileImage.ContentType == "image/png")
+            {
+                string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
+                ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
+                model.ProfileImageFileName = filename;
+
+            }
+
+            EvernoteUserManager eum = new EvernoteUserManager();
+            BusinessLayerResult<EverNoteUser> res = eum.UpdateProfile(model);
+            if(res.Errors.Count>0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Items = res.Errors,
+                    Title = "Profil Güncellenmedi",
+                    RedirectingUrl = "/Home/EditProfile"
+                };
+                return View("error", errorNotifyObj);
+            }
+
+            Session["login"] = res.Result;
+                
+
+                return RedirectToAction("ShowProfile");
         }
 
         public ActionResult RemoveProfile()
