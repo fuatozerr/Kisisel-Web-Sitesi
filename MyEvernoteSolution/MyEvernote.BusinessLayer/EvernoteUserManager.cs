@@ -1,4 +1,6 @@
-﻿using MyEvernote.Common.Helpers;
+﻿using MyEvernote.BusinessLayer.Abstract;
+using MyEvernote.BusinessLayer.Results;
+using MyEvernote.Common.Helpers;
 using MyEvernote.DataAccessLayer.EntityFramework;
 using MyEvernote.Entities;
 using MyEvernote.Entities.Messages;
@@ -11,9 +13,8 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.BusinessLayer
 {
-   public class EvernoteUserManager
+   public class EvernoteUserManager : ManagerBase<EverNoteUser>
     {
-        private Repository<EverNoteUser> repo_user = new Repository<EverNoteUser>();
 
 
         public BusinessLayerResult<EverNoteUser> RegisterUser(RegisterViewModel data)
@@ -22,9 +23,9 @@ namespace MyEvernote.BusinessLayer
             //kullanıcı e-posta kontrolü
             //kayıt işlemi
             //aktivcasyon kodu gönderimi
-            EverNoteUser user = repo_user.Find(x => x.Username == data.Username || x.Email==data.Email);
+            EverNoteUser user = Find(x => x.Username == data.Username || x.Email==data.Email);
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
-
+            
             
 
             if (user!=null)
@@ -41,7 +42,7 @@ namespace MyEvernote.BusinessLayer
             }
             else
             {
-               int dbResult= repo_user.Insert(new EverNoteUser()
+               int dbResult= Insert(new EverNoteUser()
                 {
                     Username=data.Username,
                     Email=data.Email,
@@ -55,7 +56,7 @@ namespace MyEvernote.BusinessLayer
 
                 if(dbResult>0)
                 {
-                   res.Result= repo_user.Find(x => x.Email == data.Email && x.Username == data.Username);
+                   res.Result=  Find(x => x.Email == data.Email && x.Username == data.Username);
 
                     string siteUri = ConfigHelper.Get<string>("SiteRootUri");
                     string activateUri = $"{ siteUri}/Home/UserActivate/{res.Result.ActivateGuid}";
@@ -70,10 +71,10 @@ namespace MyEvernote.BusinessLayer
         {
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
 
-            EverNoteUser user = repo_user.Find(x => x.Id == id);
+            EverNoteUser user =  Find(x => x.Id == id);
             if(user!=null)
             {
-                if(repo_user.Delete(user)==0)
+                if( Delete(user)==0)
                 {
                     res.AddError(ErrorMessageCode.UserCouldNotRemove, "Kullanıcı Silinemedi");
                 }
@@ -92,7 +93,7 @@ namespace MyEvernote.BusinessLayer
             //aktif mi?
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
  
-            res.Result = repo_user.Find(x => x.Username == data.Username && x.Password == data.Password);
+            res.Result =  Find(x => x.Username == data.Username && x.Password == data.Password);
 
 
             if (res.Result != null)
@@ -116,7 +117,7 @@ namespace MyEvernote.BusinessLayer
         {
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
 
-            res.Result = repo_user.Find(x => x.ActivateGuid == activateId);
+            res.Result =  Find(x => x.ActivateGuid == activateId);
 
             if(res.Result !=null )
             {
@@ -127,7 +128,7 @@ namespace MyEvernote.BusinessLayer
                 }
 
                 res.Result.IsActive = true;
-                repo_user.Update(res.Result);
+                 Update(res.Result);
             }
             else
             {
@@ -139,7 +140,7 @@ namespace MyEvernote.BusinessLayer
 
         public BusinessLayerResult<EverNoteUser> UpdateProfile(EverNoteUser data)  //update işlemi
         {
-            EverNoteUser db_user = repo_user.Find(x => x.Id != data.Id && (x.Username == data.Username || x.Email == data.Email));
+            EverNoteUser db_user =  Find(x => x.Id != data.Id && (x.Username == data.Username || x.Email == data.Email));
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
             
             if(db_user != null && db_user.Id != data.Id)
@@ -158,7 +159,7 @@ namespace MyEvernote.BusinessLayer
             }
 
 
-            res.Result = repo_user.Find(x => x.Id == data.Id);
+            res.Result =  Find(x => x.Id == data.Id);
             res.Result.Email = data.Email;
             res.Result.Username = data.Username;
             res.Result.Name = data.Name;
@@ -170,7 +171,7 @@ namespace MyEvernote.BusinessLayer
                 res.Result.ProfileImageFileName = data.ProfileImageFileName;
             }
 
-            if(repo_user.Update(res.Result)==0)
+            if( Update(res.Result)==0)
             {
                 res.AddError(ErrorMessageCode.ProfileCouldNotUpdated, "Profil Güncellenmedi");
             }
@@ -181,7 +182,7 @@ namespace MyEvernote.BusinessLayer
         public BusinessLayerResult<EverNoteUser> GetUserById(int id)
         {
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
-            res.Result = repo_user.Find(x => x.Id == id);
+            res.Result =  Find(x => x.Id == id);
             if(res.Result==null)
             {
                 res.AddError(ErrorMessageCode.UserNotFound, "Kullanıcı Bulunamadı");

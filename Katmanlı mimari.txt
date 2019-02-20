@@ -1,0 +1,23 @@
+1)Hazýr bir template al yada kendi tasarýmlarýný olustur.
+
+Hazýr template baþta karýþýk gelebilir ama sonuçta front-end ci olmadýðýndan hazýr kullanmak durumunda kalabilirsin. Bende yeri geldikçe öyle yapýyorum. Onun dýþýnda sadece bootstrap ile en azýndan ekran tasarla basit olsun ama sade dursun ve sadece bootstrap in class larý ile çýksýn o da yeter bence..
+
+2)Veritabanýný entities katmanýný olustur.
+
+Yes. Zaten temel katman bu.
+
+3)Veritabanýna erisim saglayan Acceslayer olustur,
+
+Yes. Zaten temel katman bu.
+
+4)Veriler üzerinde islemler yapan Bussiness layeri olustur.
+
+Yes. Zaten temel katman bu.
+
+5)UI.web katmanýný olustur.Templati buraya tasý.
+
+Yes. Zaten temel katman bu.
+
+6)Ýhtiyac dahilinde Common ,core veya baska katmanlarý olustur.
+
+Aynen. Amaç basit kod tekrarlarý oldukça bunlarý düþün ve baþka projelerde kullanabileceðin ya da kullanabilirliðini saðlamak için katmanlarý oluþturmalýsýn.
