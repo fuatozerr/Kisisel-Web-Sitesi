@@ -82,9 +82,8 @@ namespace MyEvernote.BusinessLayer
                     res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı Bulunamadı");
                 }
             }
-
-
             return res;
+
         }
 
         public BusinessLayerResult<EverNoteUser> LoginUser(LoginViewModel data)

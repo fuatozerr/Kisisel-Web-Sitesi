@@ -91,7 +91,7 @@ namespace MyEvernote.WebApp.Controllers
                 {
                     Title = "Silme İşlemi BAŞARISIZ",
                     Items = res.Errors,
-                    RedirectingUrl = "/Home/ShowProfile"
+                    RedirectingUrl = "/Home/Index"
                 };
                 return View("Error", messages);
 
@@ -120,34 +120,41 @@ namespace MyEvernote.WebApp.Controllers
         [HttpPost]
         public ActionResult EditProfile(EverNoteUser model,HttpPostedFileBase ProfileImage)
         {
-            if(ProfileImage !=null &&
-               ( ProfileImage.ContentType=="image/jpeg" ||
-                 ProfileImage.ContentType == "image/jpg" ||
-                 ProfileImage.ContentType == "image/png"))
-            {
-                string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
-                ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
-                model.ProfileImageFileName = filename;
+            ModelState.Remove("ModifiedUsername");
 
-            }
-
-            EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EverNoteUser> res = eum.UpdateProfile(model);
-            if(res.Errors.Count>0)
+           if(ModelState.IsValid)
             {
-                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                if (ProfileImage != null &&
+              (ProfileImage.ContentType == "image/jpeg" ||
+                ProfileImage.ContentType == "image/jpg" ||
+                ProfileImage.ContentType == "image/png"))
                 {
-                    Items = res.Errors,
-                    Title = "Profil Güncellenmedi",
-                    RedirectingUrl = "/Home/EditProfile"
-                };
-                return View("error", errorNotifyObj);
-            }
+                    string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
+                    ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
+                    model.ProfileImageFileName = filename;
 
-            Session["login"] = res.Result;
-                
+                }
+
+                EvernoteUserManager eum = new EvernoteUserManager();
+                BusinessLayerResult<EverNoteUser> res = eum.UpdateProfile(model);
+                if (res.Errors.Count > 0)
+                {
+                    ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                    {
+                        Items = res.Errors,
+                        Title = "Profil Güncellenmedi",
+                        RedirectingUrl = "/Home/EditProfile"
+                    };
+                    return View("error", errorNotifyObj);
+                }
+
+                Session["login"] = res.Result;
+
 
                 return RedirectToAction("ShowProfile");
+            }
+
+            return View(model);
         }
 
        
