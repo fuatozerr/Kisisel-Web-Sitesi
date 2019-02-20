@@ -9,7 +9,7 @@
         <h2>@ViewBag.Title</h2>
         <hr />
     </div>
-    <div class="row">
+    <div class="row" >
         <div class="col-md-2">
             <img src="~/images/@Model.ProfileImageFileName" class="img-circle" width="128" height="128" />
         </div>
@@ -19,7 +19,8 @@
             <h5><b>@Html.DisplayNameFor(model => model.Username) : </b>@Model.Username</h5>
             <h5><b>@Html.DisplayNameFor(model => model.Email) : </b>@Model.Email</h5>
             <br />
-            <h5><a href="#">More... </a></h5>
+            <h5><a href="/Home/EditProfile">Profili Düzenle... </a></h5>
+            <h5><a href="@Url.Action("DeleteProfile")">HESABIMI SİL</a></h5>
         </div>
     </div>
 </div>

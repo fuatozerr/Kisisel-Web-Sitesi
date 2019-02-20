@@ -66,6 +66,29 @@ namespace MyEvernote.BusinessLayer
             return res;    
         } //kullanıcı kayıt işlemi
 
+        public BusinessLayerResult<EverNoteUser> RemoveUserById(int id)
+        {
+            BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
+
+            EverNoteUser user = repo_user.Find(x => x.Id==id);
+
+            if(user!=null)
+            {
+                if(repo_user.Delete(user)==0)
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotRemove, "Kullanıcı Silinemedi");
+                }
+
+                else
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı Silinemedi");
+
+                }
+                return res;
+            }
+
+
+        }
 
         public BusinessLayerResult<EverNoteUser> LoginUser(LoginViewModel data)
         {
@@ -120,23 +143,24 @@ namespace MyEvernote.BusinessLayer
 
         public BusinessLayerResult<EverNoteUser> UpdateProfile(EverNoteUser data)  //update işlemi
         {
-            EverNoteUser db_user = repo_user.Find(x => x.Username == data.Username || x.Email == data.Email);
+            EverNoteUser db_user = repo_user.Find(x => x.Id != data.Id && (x.Username == data.Username || x.Email == data.Email));
             BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
             
-            if(db_user == null && db_user.Id != data.Id)
+            if(db_user != null && db_user.Id != data.Id)
             {
-                if(db_user.Username != data.Username)
+                if(db_user.Username == data.Username)
                 {
                     res.AddError(ErrorMessageCode.UserNameAlreadyExists, "Kullanıcı adı kayıtlı");
                 }
 
-                if(db_user.Email !=data.Email)
+                if(db_user.Email ==data.Email)
                 {
                     res.AddError(ErrorMessageCode.EmailAlreadyExists, "Mail adresi kayıtlı");
                 }
 
                 return res;
             }
+
 
             res.Result = repo_user.Find(x => x.Id == data.Id);
             res.Result.Email = data.Email;

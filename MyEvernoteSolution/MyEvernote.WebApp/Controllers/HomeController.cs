@@ -79,6 +79,28 @@ namespace MyEvernote.WebApp.Controllers
             return View(res.Result);
         }
 
+        public ActionResult DeleteProfile()
+        {
+            EverNoteUser currentUser = Session["login"] as EverNoteUser;
+            EvernoteUserManager eum = new EvernoteUserManager();
+            BusinessLayerResult<EverNoteUser> res = eum.RemoveUserById(currentUser);
+
+            if(res.Errors.Count>0)
+            {
+                ErrorViewModel messages = new ErrorViewModel()
+                {
+                    Title = "Silme İşlemi BAŞARISIZ",
+                    Items = res.Errors,
+                    RedirectingUrl = "/Home/ShowProfile"
+                };
+                return View("Error", messages);
+
+            }
+            Session.Clear();
+            return RedirectToAction("Index");
+
+        }
+
         public ActionResult EditProfile()
         {
             EverNoteUser currentUser = Session["login"] as EverNoteUser;
@@ -99,9 +121,9 @@ namespace MyEvernote.WebApp.Controllers
         public ActionResult EditProfile(EverNoteUser model,HttpPostedFileBase ProfileImage)
         {
             if(ProfileImage !=null &&
-                ProfileImage.ContentType=="image/jpeg" ||
+               ( ProfileImage.ContentType=="image/jpeg" ||
                  ProfileImage.ContentType == "image/jpg" ||
-                 ProfileImage.ContentType == "image/png")
+                 ProfileImage.ContentType == "image/png"))
             {
                 string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
                 ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
@@ -128,10 +150,7 @@ namespace MyEvernote.WebApp.Controllers
                 return RedirectToAction("ShowProfile");
         }
 
-        public ActionResult RemoveProfile()
-        {
-            return View();
-        }
+       
         public ActionResult Login()
         {
             return View();
