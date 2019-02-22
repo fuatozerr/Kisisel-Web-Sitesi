@@ -17,7 +17,10 @@ namespace MyEvernote.WebApp.Controllers
         // GET: Category
         public ActionResult Index()
         {
-
+           /* if(Session["login"]==null)
+            {
+                return RedirectToAction("Index", "Home");
+            }*/
             return View(CategoryManager.List());
         }
 
@@ -49,6 +52,11 @@ namespace MyEvernote.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create( Category category)
         {
+            ModelState.Remove("CreatedOn");
+            ModelState.Remove("ModifiedOn");
+
+            ModelState.Remove("ModifiedUsername");
+
             if (ModelState.IsValid)
             {
                 CategoryManager.Insert(category);
@@ -61,6 +69,7 @@ namespace MyEvernote.WebApp.Controllers
         // GET: Category/Edit/5
         public ActionResult Edit(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -80,10 +89,19 @@ namespace MyEvernote.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit( Category category)
         {
+            ModelState.Remove("CreatedOn");
+            ModelState.Remove("ModifiedOn");
+
+            ModelState.Remove("ModifiedUsername");
+
             if (ModelState.IsValid)
             {
-                //to do 
-                CategoryManager.Update(category);
+                Category cat = CategoryManager.Find(x => x.Id == category.Id);
+                cat.Title = category.Title;
+                cat.Description = category.Description;
+
+
+                CategoryManager.Update(cat);
                 return RedirectToAction("Index");
             }
             return View(category);
