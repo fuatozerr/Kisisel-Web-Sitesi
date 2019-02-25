@@ -25,7 +25,7 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
                 CreatedOn = DateTime.Now,
                 ModifiedOn = DateTime.Now.AddMinutes(5),
                 ModifiedUsername = "fuatozer",
-                ProfileImageFileName = "User_boy.png"
+                ProfileImageFilename = "User_boy.png"
 
 
             };
@@ -43,7 +43,7 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
                 CreatedOn = DateTime.Now,
                 ModifiedOn = DateTime.Now.AddMinutes(5),
                 ModifiedUsername = "fuatozer",
-                ProfileImageFileName = "User_boy.png"
+                ProfileImageFilename = "User_boy.png"
 
 
             };
@@ -66,7 +66,7 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
                     CreatedOn = DateTime.Now,
                     ModifiedOn = DateTime.Now.AddMinutes(5),
                     ModifiedUsername = "fuatozer",
-                    ProfileImageFileName="User_boy.png"
+                    ProfileImageFilename = "User_boy.png"
 
                 };
                 context.EvernoteUsers.Add(user);

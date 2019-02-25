@@ -87,13 +87,25 @@
                                 @if (user.IsAdmin)
                                 {
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/Category/Create"><span class="glyphicon glyphicon-plus"></span>Kategori Ekle</a></li>
-                                    <li><a href="/Category/Index"><span class="glyphicon glyphicon-th-list"></span>Kategoriler</a></li>
-                                }
-                               
+                                    <li>  @Bootstrapt.LinkMenu("/Category/Create", "plus", "Kategori Ekle")</li>
+                                    <li>  @Bootstrapt.LinkMenu("/Category/Index", "list", "Kategoriler")</li>
 
 
-                            </ul>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        @Bootstrapt.LinkMenu("/EvernoteUser/Create", "plus", "Kullanıcı Ekle")
+                                    </li>
+                                    <li>
+                                        @Bootstrapt.LinkMenu("/EvernoteUser/Index", "list", "Kullanıcılar")
+                                    </li>
+
+
+
+                                        }
+
+
+
+</ul>
                            
                         </li>
                     }

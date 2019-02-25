@@ -48,7 +48,7 @@ namespace MyEvernote.BusinessLayer
                     Email=data.Email,
                     Password=data.Password,
                     ActivateGuid=Guid.NewGuid(),
-                    ProfileImageFileName="User_boy.png",
+                   ProfileImageFilename = "User_boy.png",
                     IsActive=false,
                     IsAdmin=false
 
@@ -166,9 +166,9 @@ namespace MyEvernote.BusinessLayer
             res.Result.Surname = data.Surname;
             res.Result.Password = data.Password;
 
-            if(string.IsNullOrEmpty(data.ProfileImageFileName)==false)
+            if(string.IsNullOrEmpty(data.ProfileImageFilename) ==false)
             {
-                res.Result.ProfileImageFileName = data.ProfileImageFileName;
+                res.Result.ProfileImageFilename = data.ProfileImageFilename;
             }
 
             if( Update(res.Result)==0)

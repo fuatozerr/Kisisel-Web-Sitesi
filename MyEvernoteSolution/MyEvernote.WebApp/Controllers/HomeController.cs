@@ -132,7 +132,7 @@ namespace MyEvernote.WebApp.Controllers
                 {
                     string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
                     ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
-                    model.ProfileImageFileName = filename;
+                    model.ProfileImageFilename = filename;
 
                 }
 
