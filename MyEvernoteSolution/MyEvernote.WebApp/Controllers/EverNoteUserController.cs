@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyEvernote.BusinessLayer;
+using MyEvernote.BusinessLayer.Results;
 using MyEvernote.Entities;
 
 namespace MyEvernote.WebApp.Controllers
@@ -49,11 +50,22 @@ namespace MyEvernote.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create( EverNoteUser everNoteUser)
         {
+            ModelState.Remove("CreatedOn");
+            ModelState.Remove("ModifiedOn");
+
+            ModelState.Remove("ModifiedUsername");
             if (ModelState.IsValid)
             {
 
-                evernoteUserManager.Insert(everNoteUser);
-                
+             BusinessLayerResult<EverNoteUser> res=   evernoteUserManager.Insert(everNoteUser);
+
+                if(res.Errors.Count>0)
+                {
+                    res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
+
+                    return View(everNoteUser);
+                }
+        
                 return RedirectToAction("Index");
             }
 

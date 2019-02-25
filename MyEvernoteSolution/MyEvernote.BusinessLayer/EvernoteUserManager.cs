@@ -42,7 +42,7 @@ namespace MyEvernote.BusinessLayer
             }
             else
             {
-               int dbResult= Insert(new EverNoteUser()
+               int dbResult=base.Insert(new EverNoteUser()
                 {
                     Username=data.Username,
                     Email=data.Email,
@@ -191,6 +191,41 @@ namespace MyEvernote.BusinessLayer
             return res;
 
         }
+
+        public new BusinessLayerResult<EverNoteUser> Insert(EverNoteUser data) //metod gizleyecek
+        {
+            EverNoteUser user = Find(x => x.Username == data.Username || x.Email == data.Email);
+            BusinessLayerResult<EverNoteUser> res = new BusinessLayerResult<EverNoteUser>();
+
+            res.Result = data;
+
+            if (user != null)
+            {
+                if (user.Username == data.Username)
+                {
+                    res.AddError(Entities.Messages.ErrorMessageCode.UserNameAlreadyExists, "Kullanıcı Adı kayıtlı");
+
+                }
+                if (user.Email == data.Email)
+                {
+                    res.AddError(Entities.Messages.ErrorMessageCode.EmailAlreadyExists, "Mail Kayıtlı");
+                }
+            }
+            else
+            {
+                res.Result.ProfileImageFilename = "User_boy.png";
+                res.Result.ActivateGuid = Guid.NewGuid();
+
+                if(base.Insert(res.Result)==0)
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotInserted, "Kullanıcı eklenemedi");
+                }
+
+               
+            }
+            return res;
+        }
+
 
 
     }

@@ -17,37 +17,37 @@ namespace MyEvernote.BusinessLayer.Abstract
          return   repo.Delete(obj);
         }
 
-        public T Find(Expression<Func<T, bool>> where)
+        public  T Find(Expression<Func<T, bool>> where)
         {
             return repo.Find(where);
         }
 
-        public int Insert(T obj)
+        public virtual int Insert(T obj)
         {
             return repo.Insert(obj);
         }
 
-        public List<T> List()
+        public  List<T> List()
         {
             return repo.List();
         }
 
-        public List<T> List(Expression<Func<T, bool>> where)
+        public  List<T> List(Expression<Func<T, bool>> where)
         {
             return repo.List(where);
         }
 
-        public IQueryable<T> ListQueryable()
+        public  IQueryable<T> ListQueryable()
         {
             return repo.ListQueryable();
         }
 
-        public int Save()
+        public  int Save()
         {
             return repo.Save();
         }
 
-        public int Update(T obj)
+        public  int Update(T obj)
         {
             return repo.Update(obj);
         }
