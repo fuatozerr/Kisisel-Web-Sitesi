@@ -95,9 +95,21 @@ namespace MyEvernote.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit( EverNoteUser everNoteUser)
         {
+            
+            ModelState.Remove("CreatedOn");
+            ModelState.Remove("ModifiedOn");
+
+            ModelState.Remove("ModifiedUsername");
             if (ModelState.IsValid)
             {
-                evernoteUserManager.Update(everNoteUser);
+                BusinessLayerResult<EverNoteUser> res = evernoteUserManager.Update(everNoteUser);
+
+                if (res.Errors.Count > 0)
+                {
+                    res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
+
+                    return View(everNoteUser);
+                }
                 return RedirectToAction("Index");
             }
             return View(everNoteUser);
