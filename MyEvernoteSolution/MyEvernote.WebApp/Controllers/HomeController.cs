@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyEvernote.WebApp.ViewModels;
 using MyEvernote.BusinessLayer.Results;
+using MyEvernote.WebApp.Models;
 
 namespace MyEvernote.WebApp.Controllers
 {
@@ -69,8 +70,8 @@ namespace MyEvernote.WebApp.Controllers
 
         public ActionResult ShowProfile()
         {
-            EverNoteUser currentUser = Session["login"] as EverNoteUser;
-            BusinessLayerResult<EverNoteUser> res= evernoteusermanager.GetUserById(currentUser.Id);
+
+            BusinessLayerResult<EverNoteUser> res= evernoteusermanager.GetUserById(CurrentSession.User.Id);
             if(res.Errors.Count>0)
             {
                 ErrorViewModel errorNotifObj = new ErrorViewModel()
@@ -84,8 +85,7 @@ namespace MyEvernote.WebApp.Controllers
 
         public ActionResult DeleteProfile()
         {
-            EverNoteUser currentUser = Session["login"] as EverNoteUser;
-            BusinessLayerResult<EverNoteUser> res = evernoteusermanager.RemoveUserById(currentUser.Id);
+            BusinessLayerResult<EverNoteUser> res = evernoteusermanager.RemoveUserById(CurrentSession.User.Id);
 
             if(res.Errors.Count>0)
             {
@@ -105,8 +105,7 @@ namespace MyEvernote.WebApp.Controllers
 
         public ActionResult EditProfile()
         {
-            EverNoteUser currentUser = Session["login"] as EverNoteUser;
-            BusinessLayerResult<EverNoteUser> res = evernoteusermanager.GetUserById(currentUser.Id);
+            BusinessLayerResult<EverNoteUser> res = evernoteusermanager.GetUserById(CurrentSession.User.Id);
             if (res.Errors.Count > 0)
             {
                 ErrorViewModel errorNotifObj = new ErrorViewModel()
@@ -148,7 +147,7 @@ namespace MyEvernote.WebApp.Controllers
                     return View("error", errorNotifyObj);
                 }
 
-                Session["login"] = res.Result;
+                CurrentSession.Set<EverNoteUser>("login", res.Result);
 
 
                 return RedirectToAction("ShowProfile");
@@ -180,8 +179,8 @@ namespace MyEvernote.WebApp.Controllers
                     res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
                     return View(model);
                 }
-
-                Session["login"] = res.Result;
+                //profil güncellenince ssessionda güncellenecektir.
+                CurrentSession.Set<EverNoteUser>("login", res.Result);
                 return RedirectToAction("Index");
                 //session olcak
                 //yönlendirme 

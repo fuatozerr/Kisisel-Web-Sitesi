@@ -1,5 +1,5 @@
 ﻿@using MyEvernote.Entities
-
+@using MyEvernote.WebApp.Models
 
 <!DOCTYPE html>
 <html>
@@ -32,14 +32,7 @@
 </head>
 <body>
 
-    @{ 
-        EverNoteUser user = null;
-        if(Session["login"] !=null)
-        {
-            user = Session["login"] as EverNoteUser;
-        }
-
-    }
+   
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -56,7 +49,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    @if (user != null)
+                    @if (CurrentSession.User != null)
                     {
                         <li>
                             <a href="#">
@@ -84,7 +77,7 @@
                                 <li><a href="/Note/Index"><span class="glyphicon glyphicon-th-list"></span>Notlarım</a></li>
 
                                 <li><a href="/Note/MyLikedNotes"><span class="glyphicon glyphicon-heart"></span>Beğendiklerim</a></li>
-                                @if (user.IsAdmin)
+                                @if (CurrentSession.User.IsAdmin)
                                 {
                                     <li role="separator" class="divider"></li>
                                     <li>  @Bootstrapt.LinkMenu("/Category/Create", "plus", "Kategori Ekle")</li>
@@ -124,7 +117,7 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    @if (user == null)
+                    @if (CurrentSession.User == null)
                     {
                         <li><a href="/Home/Login"><span class="glyphicon glyphicon-log-in"></span>Giriş</a></li>
                         <li><a href="/Home/Register"><span class="glyphicon glyphicon-user"></span>Kaydol </a></li>
@@ -134,7 +127,7 @@
                     {
                         <li class="dropdown">
                             <a href="/Home/ShowProfile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span class="glyphicon glyphicon-user"></span> @user.Username <span class="caret"></span>
+                                <span class="glyphicon glyphicon-user"></span> @CurrentSession.User.Username<span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
