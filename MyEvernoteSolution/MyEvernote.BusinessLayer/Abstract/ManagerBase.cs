@@ -16,7 +16,7 @@ namespace MyEvernote.BusinessLayer.Abstract
         {
          return   repo.Delete(obj);
         }
-
+       
         public virtual T Find(Expression<Func<T, bool>> where)
         {
             return repo.Find(where);
