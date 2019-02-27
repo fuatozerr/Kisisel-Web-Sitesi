@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.BusinessLayer
 {
-    class LikedManager : ManagerBase<Liked>
+   public class LikedManager : ManagerBase<Liked>
     {
 
     }
