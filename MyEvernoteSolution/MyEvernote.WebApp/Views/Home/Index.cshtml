@@ -74,7 +74,7 @@
                             <div><hr /></div>
                             <div class="ratings">
                                 <p class="pull-right">
-                                    <button class="btn btn-default">
+                                    <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment">
                                         <span class="glyphicon glyphicon-comment text-danger"></span> Yorumlar
                                     </button>
                                 </p>
@@ -100,3 +100,19 @@
 @section footer{
     @Html.Partial("_PartialFooter")
     }
+
+@Bootstrapt.ModalPopup(id: "modal_comment",title: "Yorumlar")
+
+<script>
+    $(function () {
+        $('#modal_comment').on('show.bs.modal', function (e) {
+
+            $("#modal_comment_body").load("/Comment/ShowNoteComments");
+
+        })
+
+
+    });
+
+
+</script>
