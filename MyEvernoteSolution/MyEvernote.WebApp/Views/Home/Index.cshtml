@@ -74,7 +74,8 @@
                             <div><hr /></div>
                             <div class="ratings">
                                 <p class="pull-right">
-                                    <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment">
+                                    <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment"
+                                            data-note-id="@note.Id">
                                            
                                         <span class="glyphicon glyphicon-comment text-danger"></span> Yorumlar
                                     </button>
@@ -107,15 +108,50 @@
 <script>
     $(function () {
         $('#modal_comment').on('show.bs.modal', function (e) {
+            var btn = $(e.relatedTarget);
 
-            
+            var noteid = btn.data("note-id");
 
-            $("#modal_comment_body").load("/Comment/ShowNoteComments");
+            $("#modal_comment_body").load("/Comment/ShowNoteComments/" + noteid);
 
         })
 
 
     });
 
+    function doComment(btn, e, commentid, spanid) {
+
+        var button = $(btn);
+        var mode = button.data("edit-mode");
+
+
+        if (e === "edit_clicked")
+        {
+            if (!mode)
+            {
+                button.data("edit-mode", true);
+                button.removeClass("btn-warning");
+                button.addClass("btn-success");
+                var btnSpan = button.find("span");
+                btnSpan.removeClass("glyphicon-edit");
+                btnSpan.addClass("glyphicon-ok");
+
+                $(spanid).attr("contenteditable", true);
+            }
+
+            else
+            {
+                button.data("edit-mode", false);
+                button.addClass("btn-warning");
+                button.removeClass("btn-success");
+                var btnSpan = button.find("span");
+                btnSpan.addClass("glyphicon-edit");
+                btnSpan.removeClass("glyphicon-ok");
+
+                $(spanid).attr("contenteditable", false);
+            }
+            
+        }
+    }
 
 </script>

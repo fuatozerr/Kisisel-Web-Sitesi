@@ -2,33 +2,41 @@
 @using MyEvernote.WebApp.Models
 @model List<Comment>
 
+@{ 
+    EverNoteUser user = CurrentSession.User;
+}
 
+@foreach (Comment item in Model)
+{
     <div class="media">
         <div class="media-left media-top">
             <div class="media-object">
                 <span class="glyphicon glyphicon-comment"></span>
             </div>
         </div>
-        <div class="media-body media-bottom">
+        <div class="media-body">
             <div>
-                <span class="col-md-10" id="comment_text" contenteditable="false">
-                    Vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante fusce non varius purus aenean nec magna felis fusce vestibulum velit mollis odio sollicitudin lacinia aliquam posuere, sapien elementum lobortis tincidunt, turpis dui ornare nisl, sollicitudin interdum turpis.
+                <span class="col-md-10" id="comment_text_@item.Id" contenteditable="false">
+                    @item.Text
                 </span>
-              
+                @if (user != null && user.Id == item.Owner.Id)
+                {
                     <span class="col-md-2 text-right">
-                        <button type="button" class="btn btn-warning btn-xs" >
+                        <button type="button" class="btn btn-warning btn-xs" data-edit-mode="false" onclick="doComment(this,'edit_clicked',@item.Id,'#comment_text_@item.Id');">
                             <span class="glyphicon glyphicon-edit"></span>
                         </button>
-                        <button type="button" class="btn btn-danger btn-xs" >
+                        <button type="button" class="btn btn-danger btn-xs" onclick="doComment(this,'delete_clicked',@item.Id);">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </span>
-                
+                }
                 <small class="col-md-12 text-right">
-                    <span class="glyphicon glyphicon-time"></span>12.122005 &nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="glyphicon glyphicon-user"></span> Fuat
+                    <span class="glyphicon glyphicon-time"></span> @item.ModifiedOn &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-user"></span> @item.Owner.Username
                 </small>
             </div>
         </div>
     </div>
 
+
+}
