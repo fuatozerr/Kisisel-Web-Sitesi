@@ -1,36 +1,34 @@
 ﻿@using MyEvernote.Entities
-
+@using MyEvernote.WebApp.Models
 @model List<Comment>
 
 
-<div class="media">
-    <div class="media-left media-middle">
-        <div class="media-object">
-            <span class="glyphicon glyphicon-comment"></span>
+    <div class="media">
+        <div class="media-left media-top">
+            <div class="media-object">
+                <span class="glyphicon glyphicon-comment"></span>
+            </div>
+        </div>
+        <div class="media-body media-bottom">
+            <div>
+                <span class="col-md-10" id="comment_text" contenteditable="false">
+                    Vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante fusce non varius purus aenean nec magna felis fusce vestibulum velit mollis odio sollicitudin lacinia aliquam posuere, sapien elementum lobortis tincidunt, turpis dui ornare nisl, sollicitudin interdum turpis.
+                </span>
+              
+                    <span class="col-md-2 text-right">
+                        <button type="button" class="btn btn-warning btn-xs" >
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-xs" >
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </span>
+                
+                <small class="col-md-12 text-right">
+                    <span class="glyphicon glyphicon-time"></span>12.122005 &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-user"></span> Fuat
+                </small>
+            </div>
         </div>
     </div>
 
-    <div class="media-body">
-        <div>
-        <span> 8Ut fusce varius nisl ac ipsum gravida vel pretium tellus tincidunt integer eu augue augue nunc elit dolor, luctus placerat.     </span>
-        <span class="pull-right">
-            <button type="button" class="btn btn-warning btn-xs">
-                <span class="glyphicon glyphicon-edit"></span>
-            </button>
-
-            <button type="button" class="btn btn-danger btn-xs">
-                <span class="glyphicon glyphicon-trash"></span>
-            </button>
-        </span>
-        <br />
-
-        <small>
-            <span class="glyphicon glyphicon-time"></span>12.12.2223
-            <span class="glyphicon glyphicon-user"></span>fuat
-
-        </small>
-            </div>
-    </div>
-
-
-</div>

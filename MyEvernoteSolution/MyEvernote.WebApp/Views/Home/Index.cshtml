@@ -75,6 +75,7 @@
                             <div class="ratings">
                                 <p class="pull-right">
                                     <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment">
+                                           
                                         <span class="glyphicon glyphicon-comment text-danger"></span> Yorumlar
                                     </button>
                                 </p>
@@ -106,6 +107,8 @@
 <script>
     $(function () {
         $('#modal_comment').on('show.bs.modal', function (e) {
+
+            
 
             $("#modal_comment_body").load("/Comment/ShowNoteComments");
 
