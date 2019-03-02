@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-           @Html.Partial("_PartialCategories")
+            @Html.Partial("_PartialCategories")
         </div>
         <div class="col-md-9">
             <div class="row carousel-holder">
@@ -58,39 +58,39 @@
                                 </h6>
                                 <hr />
                                 <p>
-                                    @if(string.IsNullOrEmpty(note.Text) ==false && note.Text.Length>30)
+                                    @if (string.IsNullOrEmpty(note.Text) == false && note.Text.Length > 30)
                                     {
-                                        @(note.Text.Substring(0,30  )+"... ")
-                                       
-                                        <p> <a href="#" class="btn btn-primary btn-sm" >devamı <span class="glyphicon glyphicon-chevron-right"></span></a> </p>
-                                    }
-                                    else
-                                    {
-                                        @note.Text
-                                    }
-                                </p>
+                                        @(note.Text.Substring(0, 30) + "... ")
 
-                            </div>
-                            <div><hr /></div>
-                            <div class="ratings">
-                                <p class="pull-right">
-                                    <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment"
-                                            data-note-id="@note.Id">
-                                           
-                                        <span class="glyphicon glyphicon-comment text-danger"></span> Yorumlar
-                                    </button>
-                                </p>
-                                <p>
-                                    <button class="btn btn-default" type="submit">
-                                        <span class="glyphicon glyphicon-star-empty"></span>@note.LikeCount
-                                    </button>
+                                    <p> <a href="#" class="btn btn-primary btn-sm">devamı <span class="glyphicon glyphicon-chevron-right"></span></a> </p>
+                                }
+                                else
+                                {
+                                    @note.Text
+                                }
+                                    </p>
+
+                                </div>
+                                <div><hr /></div>
+                                <div class="ratings">
+                                    <p class="pull-right">
+                                        <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment"
+                                                data-note-id="@note.Id">
+
+                                            <span class="glyphicon glyphicon-comment text-danger"></span> Yorumlar
+                                        </button>
+                                    </p>
+                                    <p>
+                                        <button class="btn btn-default" type="submit">
+                                            <span class="glyphicon glyphicon-star-empty"></span>@note.LikeCount
+                                        </button>
 
 
-                                </p>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
 
 
 
@@ -101,18 +101,19 @@
 
 @section footer{
     @Html.Partial("_PartialFooter")
-    }
+}
 
-@Bootstrapt.ModalPopup(id: "modal_comment",title: "Yorumlar")
+@Bootstrapt.ModalPopup(id: "modal_comment", title: "Yorumlar")
 
 <script>
+    var modalCommentBodyId = "#modal_comment_body";
     $(function () {
         $('#modal_comment').on('show.bs.modal', function (e) {
             var btn = $(e.relatedTarget);
 
             var noteid = btn.data("note-id");
 
-            $("#modal_comment_body").load("/Comment/ShowNoteComments/" + noteid);
+            $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
 
         })
 
@@ -125,32 +126,77 @@
         var mode = button.data("edit-mode");
 
 
-        if (e === "edit_clicked")
-        {
-            if (!mode)
-            {
+        if (e === "edit_clicked") {
+            if (!mode) {
                 button.data("edit-mode", true);
                 button.removeClass("btn-warning");
                 button.addClass("btn-success");
                 var btnSpan = button.find("span");
                 btnSpan.removeClass("glyphicon-edit");
                 btnSpan.addClass("glyphicon-ok");
-
+                $(spanid).addClass("editable");
                 $(spanid).attr("contenteditable", true);
+                $(spanid).focus();
             }
-
-            else
-            {
+            else {
                 button.data("edit-mode", false);
                 button.addClass("btn-warning");
                 button.removeClass("btn-success");
                 var btnSpan = button.find("span");
                 btnSpan.addClass("glyphicon-edit");
                 btnSpan.removeClass("glyphicon-ok");
+                $(spanid).removeClass("editable");
+
+                var txt = $(spanid).text();
 
                 $(spanid).attr("contenteditable", false);
+
+                $.ajax({
+                    method: "POST",
+                    url: "/Comment/Edit/" + commentid,
+                    data: { text: txt }
+                }).done(function (data) {
+
+                    if (data.result) {
+                        $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
+
+
+                    }
+                    else {
+                        alert("Yorum Güncellenemedi");
+                    }
+
+                }).fail(function () {
+
+                    alert("Sunucuyla bağlantı kurulamadı");
+                });
             }
-            
+
+        }
+
+        else if (e === "delete_clicked") {
+            var dialog_res = confirm("Yorum silinsin mi ?");
+            if (!dialog_res) return false;
+
+            else
+            {
+                $.ajax({
+                    method: "GET",
+                    url: "/Comment/Delete/" + commentid
+                }).done(function (data) {
+
+                    if (data.result) {
+                        //yorumlar listelenir
+                        $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
+                    }
+                    else {
+                        alert("Yorum silinemedi");
+                    }
+
+                }).fail(function () {
+                    alert("Sunucuyla bağlantı kurulamadı");
+                });
+            }
         }
     }
 
