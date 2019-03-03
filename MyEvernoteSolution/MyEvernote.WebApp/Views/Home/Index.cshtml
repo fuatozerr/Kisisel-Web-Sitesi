@@ -104,19 +104,21 @@
 }
 
 @Bootstrapt.ModalPopup(id: "modal_comment", title: "Yorumlar")
-
 <script>
-    var modalCommentBodyId = "#modal_comment_body";
-    $(function () {
-        $('#modal_comment').on('show.bs.modal', function (e) {
-            var btn = $(e.relatedTarget);
 
-            var noteid = btn.data("note-id");
+    var noteid = -1;
+    var modalCommentBodyId = "#modal_comment_body";
+
+
+    $(function () {
+
+        $('#modal_comment').on('show.bs.modal', function (e) {
+
+            var btn = $(e.relatedTarget);
+            noteid = btn.data("note-id");
 
             $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-
         })
-
 
     });
 
@@ -124,7 +126,6 @@
 
         var button = $(btn);
         var mode = button.data("edit-mode");
-
 
         if (e === "edit_clicked") {
             if (!mode) {
@@ -134,6 +135,7 @@
                 var btnSpan = button.find("span");
                 btnSpan.removeClass("glyphicon-edit");
                 btnSpan.addClass("glyphicon-ok");
+
                 $(spanid).addClass("editable");
                 $(spanid).attr("contenteditable", true);
                 $(spanid).focus();
@@ -145,11 +147,11 @@
                 var btnSpan = button.find("span");
                 btnSpan.addClass("glyphicon-edit");
                 btnSpan.removeClass("glyphicon-ok");
+
                 $(spanid).removeClass("editable");
+                $(spanid).attr("contenteditable", false);
 
                 var txt = $(spanid).text();
-
-                $(spanid).attr("contenteditable", false);
 
                 $.ajax({
                     method: "POST",
@@ -158,46 +160,61 @@
                 }).done(function (data) {
 
                     if (data.result) {
+                        // yorumlar partial tekrar yüklenir..
                         $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-
-
                     }
                     else {
-                        alert("Yorum Güncellenemedi");
+                        alert("Yorum güncellenemedi.");
                     }
 
                 }).fail(function () {
-
-                    alert("Sunucuyla bağlantı kurulamadı");
+                    alert("Sunucu ile bağlantı kurulamadı.");
                 });
             }
 
         }
-
         else if (e === "delete_clicked") {
-            var dialog_res = confirm("Yorum silinsin mi ?");
+            var dialog_res = confirm("Yorum silinsin mi?");
             if (!dialog_res) return false;
 
-            else
-            {
-                $.ajax({
-                    method: "GET",
-                    url: "/Comment/Delete/" + commentid
-                }).done(function (data) {
+            $.ajax({
+                method: "GET",
+                url: "/Comment/Delete/" + commentid
+            }).done(function (data) {
 
-                    if (data.result) {
-                        //yorumlar listelenir
-                        $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-                    }
-                    else {
-                        alert("Yorum silinemedi");
-                    }
+                if (data.result) {
+                    // yorumlar partial tekrar yüklenir..
+                    $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
+                } else {
+                    alert("Yorum silinemedi.");
+                }
 
-                }).fail(function () {
-                    alert("Sunucuyla bağlantı kurulamadı");
-                });
-            }
+            }).fail(function () {
+                alert("Sunucu ile bağlantı kurulamadı.");
+            });
+
+        } else if (e === "new_clicked") {
+
+            var txt = $("#new_comment_text").val();
+
+            $.ajax({
+                method: "POST",
+                url: "/Comment/Create",
+                data: { "text": txt, "noteid": noteid }
+            }).done(function (data) {
+
+                if (data.result) {
+                    // yorumlar partial tekrar yüklenir..
+                    $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
+                } else {
+                    alert("Yorum eklenemedi.");
+                }
+
+            }).fail(function () {
+                alert("Sunucu ile bağlantı kurulamadı.");
+            });
+
         }
-    }
 
+    }
 </script>
