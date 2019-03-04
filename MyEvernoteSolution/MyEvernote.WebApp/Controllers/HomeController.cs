@@ -315,6 +315,11 @@ namespace MyEvernote.WebApp.Controllers
 
             return View("ok",okNotifyObj);
         }
+
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
          
     }
 }
