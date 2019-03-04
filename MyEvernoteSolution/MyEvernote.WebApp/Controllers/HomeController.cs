@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using MyEvernote.WebApp.ViewModels;
 using MyEvernote.BusinessLayer.Results;
 using MyEvernote.WebApp.Models;
+using MyEvernote.WebApp.Filters;
 
 namespace MyEvernote.WebApp.Controllers
 {
@@ -68,6 +69,7 @@ namespace MyEvernote.WebApp.Controllers
             return View();
         }
 
+        [Auth]
         public ActionResult ShowProfile()
         {
 
@@ -83,6 +85,7 @@ namespace MyEvernote.WebApp.Controllers
             return View(res.Result);
         }
 
+        [Auth]
         public ActionResult DeleteProfile()
         {
             BusinessLayerResult<EverNoteUser> res = evernoteusermanager.RemoveUserById(CurrentSession.User.Id);
@@ -103,6 +106,7 @@ namespace MyEvernote.WebApp.Controllers
 
         }
 
+        [Auth]
         public ActionResult EditProfile()
         {
             BusinessLayerResult<EverNoteUser> res = evernoteusermanager.GetUserById(CurrentSession.User.Id);
@@ -117,6 +121,7 @@ namespace MyEvernote.WebApp.Controllers
             return View(res.Result);
         }
 
+        [Auth]
         [HttpPost]
         public ActionResult EditProfile(EverNoteUser model,HttpPostedFileBase ProfileImage)
         {

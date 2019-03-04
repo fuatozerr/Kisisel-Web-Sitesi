@@ -1,5 +1,6 @@
 ﻿using MyEvernote.BusinessLayer;
 using MyEvernote.Entities;
+using MyEvernote.WebApp.Filters;
 using MyEvernote.WebApp.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace MyEvernote.WebApp.Controllers
             return PartialView("_PartialComments",note.Comments);
         }
 
+        [Auth]
         [HttpPost]
         public ActionResult Edit(int? id,string text)
         {
@@ -51,7 +53,7 @@ namespace MyEvernote.WebApp.Controllers
 
         }
 
-
+        [Auth]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -80,6 +82,7 @@ namespace MyEvernote.WebApp.Controllers
             }
         }
 
+        [Auth]
         [HttpPost]
         public ActionResult Create(Comment comment, int? noteid)
         {
