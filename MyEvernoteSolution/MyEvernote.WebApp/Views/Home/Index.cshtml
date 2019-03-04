@@ -44,56 +44,50 @@
             <div class="row">
                 @foreach (Note note in Model)
                 {
-                    <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="col-sm-4 col-lg-4 col-md-4" data-note-id="@note.Id">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src="http://placehold.it/320x150" alt="@note.Title">
                             <div class="caption">
                                 <h4>
-                                    <a href="#">@note.Title</a>
+                                    <a href="#" data-toggle="modal" data-target="#modal_notedetail" data-note-id="@note.Id">
+                                        @note.Title
+                                    </a>
                                 </h4>
-                                <h6>
-                                    <span class="glyphicon glyphicon-user"></span>@note.Owner.Username
-                                    <span class="glyphicon glyphicon-time"></span> @note.ModifiedOn.ToString("dd.MM.yy HH:mm")
-
+                                <h6 class="text-right">
+                                    @note.Owner.Username <span class="glyphicon glyphicon-user"></span><br />
+                                    @note.ModifiedOn.ToString("dd.MM.yy HH:mm") <span class="glyphicon glyphicon-time"></span>
                                 </h6>
-                                <hr />
-                                <p>
-                                    @if (string.IsNullOrEmpty(note.Text) == false && note.Text.Length > 30)
-                                    {
-                                        @(note.Text.Substring(0, 30) + "... ")
-
-                                    <p> <a href="#" class="btn btn-primary btn-sm">devamı <span class="glyphicon glyphicon-chevron-right"></span></a> </p>
+                                @if (string.IsNullOrEmpty(note.Text) == false && note.Text.Length > 70)
+                                {
+                                    <p>@(note.Text.Substring(0, 70) + "...")</p>
+                                    <p class="pull-right">
+                                        <a href="#" data-toggle="modal" data-target="#modal_notedetail" data-note-id="@note.Id" class="btn btn-default btn-sm">devamı <span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    </p>
                                 }
                                 else
                                 {
-                                    @note.Text
+                                    <p>@note.Text</p>
                                 }
-                                    </p>
-
-                                </div>
-                                <div><hr /></div>
-                                <div class="ratings">
-                                    <p class="pull-right">
-                                        <button class="btn btn-default" data-toggle="modal" data-target="#modal_comment"
-                                                data-note-id="@note.Id">
-
-                                            <span class="glyphicon glyphicon-comment text-danger"></span> Yorumlar
-                                        </button>
-                                    </p>
-                                    <p>
-                                        <button class="btn btn-default" type="submit">
-                                            <span class="glyphicon glyphicon-star-empty"></span>@note.LikeCount
-                                        </button>
-
-
-                                    </p>
-                                </div>
+                            </div>
+                            <div>
+                                <hr />
+                            </div>
+                            <div class="ratings">
+                                <p class="pull-right">
+                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_comment" data-note-id="@note.Id">
+                                        <span class="glyphicon glyphicon-comment"></span> Yorumlar
+                                    </button>
+                                </p>
+                                <p>
+                                    <button class="btn btn-default btn-sm" type="button" data-liked="false" data-note-id="@note.Id">
+                                        <span class="glyphicon glyphicon-star-empty like-star"></span>&nbsp;
+                                        <span class="like-count">@note.LikeCount</span>
+                                    </button>
+                                </p>
                             </div>
                         </div>
-                    }
-
-
-
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -104,117 +98,6 @@
 }
 
 @Bootstrapt.ModalPopup(id: "modal_comment", title: "Yorumlar")
-<script>
+<script src="~/Scripts/comment.js"></script>
 
-    var noteid = -1;
-    var modalCommentBodyId = "#modal_comment_body";
-
-
-    $(function () {
-
-        $('#modal_comment').on('show.bs.modal', function (e) {
-
-            var btn = $(e.relatedTarget);
-            noteid = btn.data("note-id");
-
-            $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-        })
-
-    });
-
-    function doComment(btn, e, commentid, spanid) {
-
-        var button = $(btn);
-        var mode = button.data("edit-mode");
-
-        if (e === "edit_clicked") {
-            if (!mode) {
-                button.data("edit-mode", true);
-                button.removeClass("btn-warning");
-                button.addClass("btn-success");
-                var btnSpan = button.find("span");
-                btnSpan.removeClass("glyphicon-edit");
-                btnSpan.addClass("glyphicon-ok");
-
-                $(spanid).addClass("editable");
-                $(spanid).attr("contenteditable", true);
-                $(spanid).focus();
-            }
-            else {
-                button.data("edit-mode", false);
-                button.addClass("btn-warning");
-                button.removeClass("btn-success");
-                var btnSpan = button.find("span");
-                btnSpan.addClass("glyphicon-edit");
-                btnSpan.removeClass("glyphicon-ok");
-
-                $(spanid).removeClass("editable");
-                $(spanid).attr("contenteditable", false);
-
-                var txt = $(spanid).text();
-
-                $.ajax({
-                    method: "POST",
-                    url: "/Comment/Edit/" + commentid,
-                    data: { text: txt }
-                }).done(function (data) {
-
-                    if (data.result) {
-                        // yorumlar partial tekrar yüklenir..
-                        $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-                    }
-                    else {
-                        alert("Yorum güncellenemedi.");
-                    }
-
-                }).fail(function () {
-                    alert("Sunucu ile bağlantı kurulamadı.");
-                });
-            }
-
-        }
-        else if (e === "delete_clicked") {
-            var dialog_res = confirm("Yorum silinsin mi?");
-            if (!dialog_res) return false;
-
-            $.ajax({
-                method: "GET",
-                url: "/Comment/Delete/" + commentid
-            }).done(function (data) {
-
-                if (data.result) {
-                    // yorumlar partial tekrar yüklenir..
-                    $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-                } else {
-                    alert("Yorum silinemedi.");
-                }
-
-            }).fail(function () {
-                alert("Sunucu ile bağlantı kurulamadı.");
-            });
-
-        } else if (e === "new_clicked") {
-
-            var txt = $("#new_comment_text").val();
-
-            $.ajax({
-                method: "POST",
-                url: "/Comment/Create",
-                data: { "text": txt, "noteid": noteid }
-            }).done(function (data) {
-
-                if (data.result) {
-                    // yorumlar partial tekrar yüklenir..
-                    $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
-                } else {
-                    alert("Yorum eklenemedi.");
-                }
-
-            }).fail(function () {
-                alert("Sunucu ile bağlantı kurulamadı.");
-            });
-
-        }
-
-    }
-</script>
+<script src="~/Scripts/like.js"></script>
