@@ -33,7 +33,7 @@ namespace MyEvernote.WebApp.Controllers
            
 
 
-            return View(noteManager.ListQueryable().OrderByDescending(x => x.ModifiedOn).ToList());
+            return View(noteManager.ListQueryable().OrderByDescending(x => x.ModifiedOn).Take(6).ToList());
          //return View(nm.GetAllNoteQuryable().OrderByDescending(x => x.ModifiedOn).ToList());
 
         }
